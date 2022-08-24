@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> SIFT </title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <div class="col-xl-8 col-lg-7">
+        <img class="img-fluid mb-3 mb-lg-0" style="width: 13%;" src="C:\Users\Cirruslabs\Downloads\startbootstrap-grayscale-gh-pages\startbootstrap-grayscale-gh-pages\signup_page_temp\images\FineMineLogo.png" alt="..." />
+        <h2 class style="margin-top: -9% ;margin-left: 45%; position: relative; top: 25%;">Fine Mine</h2>
+    </div>
+    <!-- {% with messages = get_flashed_messages(with_categories = true)%}
+                    {%if messages%}
+                        {% for category, message in messages%}
+                            <div class = "alert alert - {{category}}" style="position: relative; left: 70%;" >
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {%endif%}
+                {% endwith %} -->
+</head>
+<body>
+
+    <div class="main" style = "padding: 50px">
+
+        <!-- All Skills form -->
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">SIFT</h2>
+                        <form method="POST" class="register-form" id="register-form" enctype="multipart/form-data">
+                            {{form.hidden_tag()}}
+                            <div class="form-group">
+                                {{ form.candidatename.label(class = "zmdi zmdi-account ")}}
+                                {{ form.candidatename(class ="zmdi zmdi-account ")}}
+                            </div>
+                            <div class="form-group">
+                                {{ form.email.label(class = "zmdi zmdi-email")}}
+                                {{ form.email(class ="zmdi zmdi-email")}}
+                            </div>
+                            <div class="form-group">
+                                {{ form.contact.label(class = "zmdi zmdi-lock")}}
+                                {{ form.contact(class ="zmdi zmdi-lock")}}
+                            </div>
+                            
+                        
+                            <div >
+                        
+                                <input type="file" name="signup" id="signup" class="form-submit" value="Upload" style="background-color: white; color: black;"/>
+                            </div>
+                            <div>
+                                {{form.submit(class = "form-group form-button")}}
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="images/how-to-write-resume-icon.png" alt="sing up image"></figure>
+                        <a href="#preview" class="signup-image-link">Preview</a>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+
+        <section class="preview">
+            <div class="container">
+                <div>
+                    <embed src="file_name.pdf" width="800px" height="2100px" />
+                </div>
+
+
+            </div>
+        </section>
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

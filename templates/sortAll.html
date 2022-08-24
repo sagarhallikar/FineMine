@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> SORT ALL  </title>
+    <link rel="icon" type="image/x-icon" href="static/assets/FineMineLogo.png" />
+    <!-- Font Icon
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css"> -->
+
+    <!-- Main css -->
+    
+    <link rel="stylesheet" hreflang="std css" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <div class="col-xl-8 col-lg-7">
+        <img class="img-fluid mb-3 mb-lg-0" style="width: 13%;" src="static/assets/FineMineLogo.png" alt="FineMineLogo" />
+        <h2 class style="margin-top: -9% ;margin-left: 45%; position: relative; top: 25%;">Fine Mine</h2>
+    
+    </div>
+    <!-- {% with messages = get_flashed_messages(with_categories = true)%}
+                    {%if messages%}
+                        {% for category, message in messages%}
+                            <div class = "alert alert - {{category}}" style="position: relative; left: 70%;" >
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {%endif%}
+                {% endwith %} -->
+</head>
+<body>
+
+    <div class="main" style = "padding: 50px">
+
+        <!-- All Skills form -->
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        
+                        <h2 class="form-title">   Sort All  </h2>
+                        <form method="POST" action="/getall" class="register-form" id="register-form" enctype="multipart/form-data">
+                            {{form.hidden_tag()}}
+                            <div class="form-group">
+                                {{ form.sort_al.label()}}
+                                {{ form.sort_al()}}
+                            </div>
+                            <div>
+                                {{form.Get_all(class = "btn btn-primary", value = "Get All")}}
+                                
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="static/assets/datamining-1.png"  alt="sample image"></figure>
+                        <!-- <a href="#preview" class="signup-image-link">Preview</a> -->
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+
+        <section class="preview">
+            <div class="container">
+                <div>
+                    <!-- app.logger.info(data)   -->
+                    {% for i in data %}  
+
+                         <li> 
+                            {{ i }}
+                         </li>
+                    {% endfor %}
+
+                    <!-- <embed src="" width="800px" height="2100px" /> -->
+                </div>
+            </div>
+        </section> 
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
