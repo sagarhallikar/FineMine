@@ -27,8 +27,8 @@ app = Flask(__name__)
 
 oauth = OAuth(app)
 
-GOOGLE_CLIENT_ID = '306586400383-epc15d8u7679emu9pr0hj3d2hl001nnr.apps.googleusercontent.com'
-GOOGLE_CLIENT_SECRET = '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'
+GOOGLE_CLIENT_ID = 'Your Client Id'
+GOOGLE_CLIENT_SECRET = 'Client Secret key'
 REDIRECT_URI = '/authorised'
 
 
@@ -37,14 +37,14 @@ app.config['UPLOAD_EXTENSIONS'] = ['.pdf', '.docx', '.doc']
 app.config['MAX_CONTENT_LENGTH'] = 1024*1024*1024
 app.config['UPLOAD_PATH'] = 'uploads'
 
-app.config['SECRET_KEY'] = '915ba8d82820d39206ef0733d4387660'
+app.config['SECRET_KEY'] = 'generate some random secret key'
 
 AUTH0_DOMAIN = "dev-lo037ct9.us.auth0.com"
 
 oauth.register(
     "auth0",
-    client_id="4V7po4RZpByuYfbstRa4Uu2mygNfznmF",
-    client_secret="F17IodueeP21KJzONXmFHcgEurogqa-8SlSB9AonZNkhFzd75_5EW_xiQscDhJ1y",
+    client_id="Your Client Id",
+    client_secret="'Client Secret key",
     client_kwargs={
         "scope": "openid profile email",
     },
