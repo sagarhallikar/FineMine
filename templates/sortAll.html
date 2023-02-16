@@ -92,33 +92,48 @@
 
         </style>
 
-        <section class="preview">
-            <div class="container">
-                <div class = "table">
-                    <table>
-                        <thead>
-                          <tr>
-                            <th>candidate_name</th>
-                            <th >Skills</th>
+<section class="preview">
+    <div class="container">
+        <!-- <div class = 'table'> -->
+            <!-- app.logger.info(data)   -->
+            <center>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Candidate Name</th>
+                            <th>Skills</th>
                           </tr>
-                        </thead>
-                        <tbody>  
-                          {% for i in data %}
-                            <tr> 
-                              <td>{{ i["candidate_name"] }}</td>
-                              <td>
-                                  <ul>
-                                    {% for j in i["allskills"] %} 
-                                    <li>
-                                        {{ j }}
-                                    </li>
-                                    {% endfor %}
-                                  </ul>  
-                                </td>
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
+                    </thead>
+                   <tbody>
+                    {% for cand in data %}
+                    <tr>
+                        <td>
+                            {{ cand["candidate_name"]}}
+                        </td>
+                        <td>  
+                            {% for i , j in cand.items() %}
+                            {% if i != 'candidate_name' %}
+                            {% for k in j %}
+                            <ul>
+                            
+                                <li>
+                                    
+                                    {{ k }}
+                                    
+                                </li>
+                            
+                            </ul>
+                            {% endfor %}
+                            {% endif %}
+                            {% endfor %}
+                            
+                        </td>
+                        {% endfor %}
+                    </tr>
+                
+                   </tbody>
+                  </table>
+                </center>
                    
 
                     <!-- <embed src="" width="800px" height="2100px" /> -->
