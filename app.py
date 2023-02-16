@@ -1,4 +1,5 @@
 
+from csv import reader
 from distutils.log import error
 import email
 import json
@@ -14,12 +15,13 @@ import streamlit as st
 import pymongo
 from pymongo import MongoClient
 from wand.image import Image
-from PyPDF2 import PdfFileReader,PdfFileWriter
+from PyPDF2 import PdfReader,PdfFileWriter
 from authlib.integrations.flask_client import OAuth
 from werkzeug.utils import secure_filename
 from flask import Flask, redirect, render_template, session, url_for,request,send_file
 import PyPDF2
 import codecs
+import secrets
 
 
 app = Flask(__name__)
@@ -27,8 +29,8 @@ app = Flask(__name__)
 
 oauth = OAuth(app)
 
-GOOGLE_CLIENT_ID = 'Your Client Id'
-GOOGLE_CLIENT_SECRET = 'Client Secret key'
+GOOGLE_CLIENT_ID = '500806758570-htr8muhock4srktapvq725cq8n7r1msm.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = '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'
 REDIRECT_URI = '/authorised'
 
 
@@ -37,14 +39,14 @@ app.config['UPLOAD_EXTENSIONS'] = ['.pdf', '.docx', '.doc']
 app.config['MAX_CONTENT_LENGTH'] = 1024*1024*1024
 app.config['UPLOAD_PATH'] = 'uploads'
 
-app.config['SECRET_KEY'] = 'generate some random secret key'
+app.config['SECRET_KEY'] = secrets.token_hex(32)
 
-AUTH0_DOMAIN = "dev-lo037ct9.us.auth0.com"
+AUTH0_DOMAIN = "dev-ypbqn1iuzj4k6hib.us.auth0.com"
 
 oauth.register(
     "auth0",
-    client_id="Your Client Id",
-    client_secret="'Client Secret key",
+    client_id="LIbriPvpFZO1lJziqumNIS2FHwViQQOe",
+    client_secret="Tc4YJgW_KZOnsP928MerxiEkWaDHkTIQvvwjcCqRnnwIGegq7vNO9NR6TUCTB1FT",
     client_kwargs={
         "scope": "openid profile email",
     },
@@ -55,12 +57,13 @@ SECRET_KEY = 'development key'
 DEBUG = True
 
 try:
-    mongo = pymongo.MongoClient(
-        host = "localhost",
-        port = 27017,
-        serverSelectionTimeoutMS = 1000
-    )
-    db = mongo.finewebapp
+    mongo = pymongo.MongoClient("mongodb://localhost:27017/FineMine")
+    #     host = "localhost",
+    #     port = 27017,
+    #     serverSelectionTimeoutMS = 1000
+    # )
+    db =mongo.get_database()
+    collection = db.get_collection('BinaryDatas')
     
     mongo.server_info() #trigger exception if cannot connect to db
 except:
@@ -236,12 +239,12 @@ def upload():
                 
                 # with codecs.open(bytes(uploadfile.read()), 'rb', encoding='utf-8',errors='ignore') as fdata:
                       
-                read_pdf = PyPDF2.PdfFileReader(uploadfile)
-                number_of_pages = read_pdf.getNumPages()
+                read_pdf = PyPDF2.PdfReader(uploadfile)
+                number_of_pages = len(read_pdf.pages)
                 page_content_acc = ''
                 for page_number in range(number_of_pages):   # use xrange in Py2
-                    page = read_pdf.getPage(page_number)
-                    page_content = page.extractText()
+                    page = read_pdf.pages[page_number]
+                    page_content = page.extract_text()
                     page_content_acc = page_content_acc + page_content
                     # print(page_content)
 

@@ -59,17 +59,67 @@
             </div>
             
         </section>
+        <style>
+            table {
+            width: 60%;
+            margin: auto;
+            border-collapse: collapse;
+            }
+
+            th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            }
+
+            th {
+            background-color: #ddd;
+            align-content: center;
+            width: 80px;
+            }
+
+            tr:nth-child(even) {
+            background-color: #f2f2f2;
+            }
+
+            caption {
+            caption-side: top;
+            font-weight: bold;
+            /* padding-bottom: 15px; */
+            align-items: center;
+            }
+           
+
+        </style>
 
         <section class="preview">
             <div class="container">
-                <div>
-                    <!-- app.logger.info(data)   -->
-                    {% for i in data %}  
-
-                         <li> 
-                            {{ i }}
-                         </li>
-                    {% endfor %}
+                <div class = "table">
+                    <table>
+                        <thead>
+                          <tr>
+                            <th>candidate_name</th>
+                            <th >Skills</th>
+                          </tr>
+                        </thead>
+                        <tbody>  
+                          {% for i in data %}
+                            <tr> 
+                              <td>{{ i["candidate_name"] }}</td>
+                              <td>
+                                  <ul>
+                                    {% for j in i["allskills"] %} 
+                                    <li>
+                                        {{ j }}
+                                    </li>
+                                    {% endfor %}
+                                  </ul>  
+                                </td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                   
 
                     <!-- <embed src="" width="800px" height="2100px" /> -->
                 </div>
