@@ -19,10 +19,10 @@ class Allskills(FlaskForm):
 class Sample(FlaskForm):
     candidatename = StringField(' Candidate Name ',validators= [DataRequired(),Length(min=3,max = 40)])
     contact = IntegerField('Contact Number',validators= [DataRequired()])
-    sort = SelectField(u'Search for any Skill Set',choices = [('default','                 '),('AS','All Skills'),('Prg_lang','Programming Language'),('WT','Web Technologies'),('db','Database Management'),('tl','Tools'),('Scpt_lang','Scripting Language'),('Frnt_nd','Front End Technologies'),('DS','Data Science'),('Frm_wks','Frameworks')])
+    sort = SelectField(u'Search for any Skill Set',choices = [('default','                 '),('AS','All Skills'),('Cfkt','Certifications'),('Prg_lang','Programming Language'),('WT','Web Technologies'),('db','Database Management'),('tl','Tools'),('Scpt_lang','Scripting Language'),('Frnt_nd','Front End Technologies'),('DS','Data Science'),('Frm_wks','Frameworks')])
     resume  = FileField('file')
     Get_data = SubmitField('Get Data')
  
 class SortAll(FlaskForm):
-    sort_al = SelectField(u'Search for any Skill Set',choices = [('default','                 '),('AS','All Skills'),('Prg_lang','Programming Language'),('WT','Web Technologies'),('db','Database Management'),('tl','Tools'),('Scpt_lang','Scripting Language'),('Frnt_nd','Front End Technologies'),('DS','Data Science'),('Frm_wks','Frameworks')])
+    sort_al = SelectField(u'Search for any Skill Set',choices = [('default','                 '),('AS','All Skills'),('Cfkt','Certifications'),('Prg_lang','Programming Language'),('WT','Web Technologies'),('db','Database Management'),('tl','Tools'),('Scpt_lang','Scripting Language'),('Frnt_nd','Front End Technologies'),('DS','Data Science'),('Frm_wks','Frameworks')])
     Get_all = SubmitField('All Data')

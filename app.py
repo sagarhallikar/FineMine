@@ -2,6 +2,7 @@
 from csv import reader
 from distutils.log import error
 import email
+import io
 import json
 import os
 from os import environ as env
@@ -22,6 +23,12 @@ from flask import Flask, redirect, render_template, session, url_for,request,sen
 import PyPDF2
 import codecs
 import secrets
+# from flask import Flask, request , render_template ,redirect
+
+# import pdfminer
+from pdfminer.high_level import extract_pages
+from pdfminer.layout import LTTextContainer,LTChar,LTTextBoxHorizontal
+from io import BytesIO
 
 
 app = Flask(__name__)
@@ -155,7 +162,9 @@ def getdata():
         elif request.form.get('sort') == 'DS':
             output = check["ds"]
         elif request.form.get('sort') == 'Frm_wks':
-            output = check["framework"]       
+            output = check["framework"]   
+        elif request.form.get('sort') == 'Cfkt':
+            output=check['certifications']    
         return render_template('samples.html', form = form, data = output, error = errors )
     return render_template('home.html')
     
@@ -178,6 +187,8 @@ def getall():
             y =''
             if  x == 'AS':            
                 y = "allskills"
+            elif x=='Cfkt':
+                y="certifications"
             elif x == 'Prg_lang':
                 y = "prglang"
             elif x == 'WT':
@@ -200,7 +211,7 @@ def getall():
                 result1 = []
                 # print(result)
                 for s in result:
-                    print(s) 
+                    # print(s) 
                     result1.append(s)                                                                                
             return render_template('sortAll.html', form = form, data = result1, error = errors )
     return render_template('home.html')
@@ -217,6 +228,68 @@ def downloadFile ():
     path = "uploads/"+data["filename"]
     return send_file(path, as_attachment=True)
 
+# Extracting certification details from resume
+
+def extract_text_font(pdf1_file):
+    text_font = []
+    for page_layout in extract_pages(pdf1_file):  #extract_pages()  ???
+        # print(page_layout)
+        for container in page_layout:
+            if isinstance(container, LTTextBoxHorizontal):
+                for line in container:
+                        text = line.get_text()
+                        # print(text)
+                    # for line in element:
+                        for character in line:
+                            if isinstance(character, LTChar):
+                                if hasattr(character, "fontname"):
+                                    font_name = character.fontname
+                                    fontsize = character.size
+
+                        text_font.append([text,font_name,fontsize])            
+    return text_font                            
+
+# details_list = extract_text_font(pdf_content)    
+# print(details_list)   
+
+
+def extract_certifications(data):
+    headings = []
+    paragraphs = []
+    current_heading = ''
+    current_paragraph = []
+    for i in range(1, len(data)-1):
+        current_data = data[i]
+        next_data = data[i + 1]
+        previous_data = data[i - 1]
+        # print(current_data)
+        if current_data[2] > next_data[2] and current_data[2] > previous_data[2] :
+            if current_heading != '':
+                headings.append(current_heading)
+                paragraphs.append(' '.join(current_paragraph))
+            current_heading = current_data[0]
+            
+            # current_paragraph = []
+        # elif current_data[1] != next_data[1] and current_data[1] != previous_data[1] :
+        #     if current_heading != '':
+        #         headings.append(current_heading)
+        #         paragraphs.append(' '.join(current_paragraph))
+        #     current_heading = current_data[0]
+            current_paragraph = []
+        else:
+            current_paragraph.append(current_data[0])
+    if current_heading != '':
+        headings.append(current_heading)
+        paragraphs.append(' '.join(current_paragraph))
+    # print(current_heading)    
+    dictt =  {headings[i]: paragraphs[i] for i in range(len(headings))}
+    # print(dictt)
+
+    for key , value in dictt.items():
+        text1 = ''.join(key.split()) #check in all headings
+        if 'certification' in text1.lower():
+            # print('Certifications:' , value)
+            return value.strip().split('\n')
 
 
 @app.route('/upload',methods = ['POST'])
@@ -225,6 +298,11 @@ def upload():
         form = Allskills()        
         if request.form['submit']:        
             uploadfile = request.files.get('resume')
+            pdf_data=uploadfile.read()
+            with BytesIO(pdf_data) as pdf_file1:
+                certifications= extract_certifications(extract_text_font(pdf_file1))
+                    
+                    
             
             if not uploadfile:
                 print('True')
@@ -238,7 +316,8 @@ def upload():
                 # uploadfile.save(os.path.join(app.config['UPLOAD_PATH'], filename))
                 
                 # with codecs.open(bytes(uploadfile.read()), 'rb', encoding='utf-8',errors='ignore') as fdata:
-                      
+                # pdf_data=uploadfile.read()
+                
                 read_pdf = PyPDF2.PdfReader(uploadfile)
                 number_of_pages = len(read_pdf.pages)
                 page_content_acc = ''
@@ -249,6 +328,10 @@ def upload():
                     # print(page_content)
 
                 cont1 = re.sub('[^A-Za-z0-9]+', ' ', page_content_acc)
+                # with BytesIO(pdf_data) as pdf_file1:
+                    
+                #     certifications= extract_certifications(extract_text_font(pdf_file1))
+                # print(certifications)
                 # print(cont1)
                 programming_lang = ["Javascript","Python","C","Java","Go", "Perl", "Ruby","swift", "Scala", "PHP", "C++", "R programming","Objective C", "SQL","Structured Query Language"," Arduino","MATLAB","Rust","Typescript","Kotlin","CSS","Groovy","Dart","Powershell","Julia","Scratch","COBOL","Fortron", "Shell","Prolog","VBScript","Haskell","Delphi","Hack","PASCAL","ADA","LUA","Visual Basic","Lisp","Bash","SAS Programming","C#"]
                 web_technologies = ["MEAN stack","PHP","Django","Ruby","React.js","HTML","Node.Js", "React", "ASP.NET","Laravel", "Swift", "Go", "Vue","React", "Angular", "Ember", "JQuery","Structured Query Language","Java","AngularJS","Rust","Typescript","Kotlin","CSS","C#"]
@@ -280,7 +363,8 @@ def upload():
                 candi_ds_skills = list(set(filter(lambda x : x in cont1 , Data_Science)))
                 print("--------------------------------------------------------")
                 candi_framework_skills = list(set(filter(lambda x : x in cont1 , Frameworks)))
-                
+                print("---------------------------------------------------------")
+                candi_certification=list(set(filter(lambda x : x in certifications,certifications)))
                 newdata = {
                     "candidate_name":request.form["candidatename"],
                     "c_email_id":request.form["email"],
@@ -288,6 +372,7 @@ def upload():
                     "filename":filename,
                     "uploadfile" :base64.b64encode(bytes(uploadfile.read())),
                     "allskills": candi_all_skills,
+                    "certifications":candi_certification,
                     "prglang":candi_prg_skills,
                     "web":candi_web_skills,
                     "db":candi_db_skills,
@@ -295,7 +380,8 @@ def upload():
                     "script":candi_script_skills,
                     "front":candi_front_skills,
                     "ds":candi_ds_skills,
-                    "framework":candi_framework_skills
+                    "framework":candi_framework_skills,
+                    
                 }
 
                 check = db.allskills_db.find_one(filter=dict(contact_no=request.form['contact']))

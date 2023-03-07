@@ -97,11 +97,13 @@
         <!-- <div class = 'table'> -->
             <!-- app.logger.info(data)   -->
             <center>
+               
                 <table>
                     <thead>
                         <tr>
                             <th>Candidate Name</th>
                             <th>Skills</th>
+                        
                           </tr>
                     </thead>
                    <tbody>
@@ -109,6 +111,7 @@
                     <tr>
                         <td>
                             {{ cand["candidate_name"]}}
+                        
                         </td>
                         <td>  
                             {% for i , j in cand.items() %}
@@ -134,7 +137,7 @@
                    </tbody>
                   </table>
                 </center>
-                   
+                
 
                     <!-- <embed src="" width="800px" height="2100px" /> -->
                 </div>
